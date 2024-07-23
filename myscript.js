@@ -302,15 +302,6 @@ async function best_move_request_api(fenNotation) {
     }
 }
 
-
-async function best_move_request(fenNotation, use_local_server){
-    if(use_local_server){
-        return best_move_request_local_server(fenNotation);
-    } else {
-        return best_move_request_api(fenNotation);
-    }
-}
-
 async function fetchBestMove() {
 
     const pieces = getPieces();
@@ -331,7 +322,9 @@ async function fetchBestMove() {
 
         await setChromeStorageData({ lastFen: fenNotation });
 
-        best_move_request(fenNotation, use_local_server=False);
+        // use your preferred stockfish method
+        // best_move_request_local_server(fenNotation):
+        best_move_request_api(fenNotation);
     }
 
     if (result.currentDrawMode !== result.drawMode) {
