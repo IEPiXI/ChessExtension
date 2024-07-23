@@ -1,0 +1,18 @@
+{
+    "manifest_version": 3,
+    "name": "CCCE",
+    "version": "1.0",
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": ["activeTab", "tabs", "scripting","storage"],
+    "icons": {
+        "16": "icon.png",
+        "32": "icon.png",
+        "48": "icon.png",
+        "128": "icon.png"
+    }
+}

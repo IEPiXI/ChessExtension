@@ -1,0 +1,12 @@
+{   
+    "server_config": {
+        "host": "0.0.0.0",
+        "port": 5000
+    },
+    "stock_fish_config": {
+        "path": "C:/Program Files (x86)/stockfish_slow/stockfish-windows-x86-64-sse41-popcnt.exe",
+        "threads": 8,
+        "depth": 20,
+        "minimum_thinking_time": 1
+    }
+}

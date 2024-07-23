@@ -1,0 +1,1 @@
+This is the chess extension for Google Chrome on Chess.com
