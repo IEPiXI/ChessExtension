@@ -30,6 +30,7 @@ document.getElementById('toggleDrawModeButton').addEventListener('click', functi
         chrome.storage.local.set({drawMode: newMode}, function() {
             console.log('Draw mode updated:', newMode);
         });
-        document.getElementById('toggleDrawModeButton').innerText = newMode === "circle" ? "Draw Arrows" : "Draw Circles";
+        chrome.storage.local.set({forceRedraw: true});
+        document.getElementById('toggleDrawModeButton').innerText = newMode === "circle" ? "Draw Arrows" : "Draw Circles";        
     });
 });

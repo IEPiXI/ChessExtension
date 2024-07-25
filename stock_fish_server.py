@@ -38,8 +38,9 @@ class StockFishServer:
     def stock_fish_best_move(self, fen):
         try:
             self.stock_fish.set_fen_position(fen)
-            best_move = self.stock_fish.get_best_move()
-            return best_move, None
+            move = self.stock_fish.get_top_moves(1)[0]
+            print(move)
+            return move, None
         except StockfishException:
             self.stock_fish = self.get_stock_fish(self.stock_fish_config)
             return None, 'illegal_move'
@@ -53,9 +54,9 @@ class StockFishServer:
         with self.lock:
             best_move, error_msg = self.stock_fish_best_move(fen)
             if best_move is not None and error_msg is None:
-                return jsonify({'best_move': best_move}), 200
+                return jsonify({'bestmove': best_move['Move'], 'mate': best_move['Mate']}), 200
             else:
-                return jsonify({'best_move': error_msg}), 200
+                return jsonify({'bestmove': error_msg}), 200
 
 
 def main(config):
@@ -68,7 +69,7 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description='')
-    parser.add_argument('-c', '--config', type=str, help='path to the server_config.json', default='./configs/local_server_config.json')
+    parser.add_argument('-c', '--config', type=str, help='path to the server_config.json', default='./local_configs/local_server_config.json')
     args = parser.parse_args()
 
     main(args.config)

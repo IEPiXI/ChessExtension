@@ -2,7 +2,6 @@ let pollingIntervalId = null;
 
 
 chrome.storage.local.set({polling: false});
-chrome.storage.local.set({drawMode: 'arrow'});
 
 function startPolling() {
     if (pollingIntervalId === null) {
@@ -23,12 +22,14 @@ function startPolling() {
             });
         }, 200);
         chrome.storage.local.set({polling: true});
+        chrome.storage.local.set({forceRedraw: true});
     }
 }
 function stopPolling() {
     if (pollingIntervalId !== null) {
         clearInterval(pollingIntervalId);
         pollingIntervalId = null;
+        clearDrawnElements();
         chrome.storage.local.set({polling: false});
     }
 }
@@ -59,7 +60,6 @@ function clearArrows() {
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if(request.message === "start_polling") {
-        chrome.storage.local.clear();
         startPolling();
         sendResponse({message: "Started polling"});
     } else if (request.message === "stop_polling") {

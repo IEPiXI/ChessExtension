@@ -259,16 +259,21 @@ async function best_move_request_local_server(fenNotation){
         });
 
         const data = await response.json();
-        const bestMove = data.best_move;
+        const bestMove = data.bestmove;
+        if (data.mate){
+            console.log('Mate in: ' + data.mate.toString());
+        }
         console.log(bestMove);
 
-        // Save the current bestMove
         await setChromeStorageData({ bestMove: bestMove });
         const updatedResult = await getChromeStorageData(['drawMode', 'bestMove']);
         redraw(updatedResult.drawMode, updatedResult.bestMove);
         
     } catch (error) {
         console.error('Error:', error);
+    }
+    finally {
+        await setChromeStorageData({ scriptAlreadyExecuted: false });
     }
 }
 
@@ -292,6 +297,8 @@ async function best_move_request_api(fenNotation) {
             }
 
             await setChromeStorageData({ bestMove: bestMove });
+            await setChromeStorageData({ forceRedraw: true });
+            
             const updatedResult = await getChromeStorageData(['drawMode', 'bestMove']);
             redraw(updatedResult.drawMode, updatedResult.bestMove);
         } else {
@@ -300,15 +307,17 @@ async function best_move_request_api(fenNotation) {
     } catch (error) {
         console.error('Error:', error);
     }
+    finally {
+        await setChromeStorageData({ scriptAlreadyExecuted: false });
+    }
 }
 
 async function fetchBestMove() {
 
     const pieces = getPieces();
     const fenNotation = getFEN(pieces);
-    let forceRedraw = false;
 
-    const result = await getChromeStorageData(['lastFen', 'bestMove', 'drawMode', 'currentDrawMode', 'scriptAlreadyExecuted']);
+    const result = await getChromeStorageData(['lastFen', 'bestMove', 'drawMode', 'forceRedraw', 'scriptAlreadyExecuted']);
 
     if (!result.bestMove || !result.lastFen || fenNotation !== result.lastFen) {
         const { scriptAlreadyExecuted } = await getChromeStorageData(['scriptAlreadyExecuted']);
@@ -322,26 +331,18 @@ async function fetchBestMove() {
 
         await setChromeStorageData({ lastFen: fenNotation });
 
-        // use your preferred stockfish method
-        // best_move_request_local_server(fenNotation):
-        best_move_request_api(fenNotation);
+        //use your preferred stockfish method
+        best_move_request_local_server(fenNotation);
+        //best_move_request_api(fenNotation);
     }
 
-    if (result.currentDrawMode !== result.drawMode) {
-        await setChromeStorageData({ currentDrawMode: result.drawMode });
-        console.log('currentDrawMode is updated to ' + result.drawMode);
-        console.log(result.bestMove);
-        forceRedraw = true;
-    }
-
-    if (result.bestMove && forceRedraw) {
+    if (result.bestMove && result.forceRedraw) {
         console.log("redrawn");
-        
+        await setChromeStorageData({ forceRedraw: false });
         const updatedResult = await getChromeStorageData(['drawMode', 'bestMove']);
         redraw(updatedResult.drawMode, updatedResult.bestMove);
     }
 
-    await setChromeStorageData({ scriptAlreadyExecuted: false });
 }
 
 fetchBestMove();
