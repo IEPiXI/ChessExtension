@@ -9,6 +9,7 @@
         "service_worker": "background.js"
     },
     "permissions": ["activeTab", "tabs", "scripting","storage"],
+    "host_permissions": ["https://stockfish.online/api/*"],
     "icons": {
         "16": "icon.png",
         "32": "icon.png",

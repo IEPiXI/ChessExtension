@@ -297,8 +297,6 @@ async function best_move_request_api(fenNotation) {
             }
 
             await setChromeStorageData({ bestMove: bestMove });
-            await setChromeStorageData({ forceRedraw: true });
-            
             const updatedResult = await getChromeStorageData(['drawMode', 'bestMove']);
             redraw(updatedResult.drawMode, updatedResult.bestMove);
         } else {
@@ -322,10 +320,9 @@ async function fetchBestMove() {
     if (!result.bestMove || !result.lastFen || fenNotation !== result.lastFen) {
         const { scriptAlreadyExecuted } = await getChromeStorageData(['scriptAlreadyExecuted']);
 
-        if (scriptAlreadyExecuted){
+        if (scriptAlreadyExecuted == true){
             return;
         }
-
         await setChromeStorageData({ scriptAlreadyExecuted: true });
         console.log("Retrieving new best move from server...");
 

@@ -31,6 +31,7 @@ function stopPolling() {
         pollingIntervalId = null;
         clearDrawnElements();
         chrome.storage.local.set({polling: false});
+        chrome.storage.local.set({scriptAlreadyExecuted: false});
     }
 }
 
@@ -38,20 +39,19 @@ function stopPolling() {
 function clearDrawnElements() {
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
         let tab = tabs[0]; // Get the active tab
-        chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            function: clearArrows
-        });
+        if(tab){
+            chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                function: clearArrows
+            });
+        }
     });
 }
 
 function clearArrows() {
     const svg = document.querySelector('svg.arrows');
-
-    console.log(svg);
     if (svg) {
         const existingElements = svg.querySelectorAll('line, circle');
-        console.log(existingElements);
         if (existingElements) {
             existingElements.forEach(element => element.remove());
         }
