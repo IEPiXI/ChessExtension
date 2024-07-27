@@ -1,6 +1,18 @@
-chrome.storage.local.get(['polling', 'drawMode'], function(result) {
-    document.getElementById('runScriptButton').innerText = result.polling ? "Switch Off" : "Switch On";
-    document.getElementById('toggleDrawModeButton').innerText = result.drawMode === "circle" ? "Draw Arrows" : "Draw Circles";
+chrome.storage.local.get(['polling', 'drawMode', 'useAPI'], function(result) {
+    const checkbox = document.getElementById('apiCheckbox');
+    checkbox.style.transition = 'none';
+    const useAPI = result.useAPI;
+    const polling = result.polling;
+    const drawMode = result.drawMode;
+
+    document.getElementById('runScriptButton').innerText = polling ? "Switch Off" : "Switch On";
+    document.getElementById('toggleDrawModeButton').innerText = drawMode === "circle" ? "Draw Arrows" : "Draw Circles";
+    document.getElementById('apiCheckbox').checked = useAPI;
+
+    setTimeout(() => {
+        checkbox.style.transition = '';
+    },50);
+
 });
 
 document.getElementById('runScriptButton').addEventListener('click', function() {
@@ -32,5 +44,12 @@ document.getElementById('toggleDrawModeButton').addEventListener('click', functi
         });
         chrome.storage.local.set({forceRedraw: true});
         document.getElementById('toggleDrawModeButton').innerText = newMode === "circle" ? "Draw Arrows" : "Draw Circles";        
+    });
+});
+
+document.getElementById('apiCheckbox').addEventListener('change', function() {
+    const useAPI = this.checked;
+    chrome.storage.local.set({useAPI: useAPI}, function() {
+        console.log('API usage preference updated:', useAPI);
     });
 });

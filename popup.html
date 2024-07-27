@@ -1,9 +1,31 @@
 <!DOCTYPE html>
 <html>
-    <body>
-        <button id = "runScriptButton">Run script</button>
-        <button id="toggleDrawModeButton">Toggle Drawing</button>
-        <script src="popup.js"></script>
-        <script src="myscript.js"></script>
-    </body>
+<head>
+    <link href="styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="card">
+        <div class="grid-container">
+            <div class="grid-item">
+                <label class="caption-label"> ChessExtension</label>
+            </div>
+            <div class="grid-item">
+                <button class="button" id="runScriptButton">Run script</button>
+            </div>
+            <div class="grid-item">
+                <button class="button" id="toggleDrawModeButton">Toggle Drawing</button>
+            </div>
+            <div class="grid-item checkbox-wrapper-25">
+                <label class="checkbox-label">Local</label>
+                <input type="checkbox" id="apiCheckbox">
+                <label class="checkbox-label">API</label>
+            </div>
+            <div class="grid-item">
+                <label class="author-label">Made by IEPiX</label>
+            </div>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+    <script src="myscript.js"></script>
+</body>
 </html>

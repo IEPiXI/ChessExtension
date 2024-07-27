@@ -1,6 +1,5 @@
 let pollingIntervalId = null;
 
-
 chrome.storage.local.set({polling: false});
 
 function startPolling() {
@@ -23,6 +22,7 @@ function startPolling() {
         }, 200);
         chrome.storage.local.set({polling: true});
         chrome.storage.local.set({forceRedraw: true});
+        chrome.storage.local.set({scriptAlreadyExecuted: false});
     }
 }
 function stopPolling() {
@@ -31,7 +31,6 @@ function stopPolling() {
         pollingIntervalId = null;
         clearDrawnElements();
         chrome.storage.local.set({polling: false});
-        chrome.storage.local.set({scriptAlreadyExecuted: false});
     }
 }
 

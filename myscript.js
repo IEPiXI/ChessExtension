@@ -250,15 +250,19 @@ function setChromeStorageData(data) {
 
 async function best_move_request_local_server(fenNotation){
     try {
-        const response = await fetch('http://localhost:5000/best_move', {
+
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out after 3 seconds')), 3000));
+
+        const fetchPromise = fetch('http://localhost:5000/best_move', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ fen: fenNotation })
-        });
+        }).then(response => response.json());
 
-        const data = await response.json();
+        const data = await Promise.race([fetchPromise, timeoutPromise]);
+
         const bestMove = data.bestmove;
         if (data.mate){
             console.log('Mate in: ' + data.mate.toString());
@@ -283,11 +287,13 @@ async function best_move_request_api(fenNotation) {
         url.searchParams.append('fen', fenNotation);
         url.searchParams.append('depth', 15);
 
-        const response = await fetch(url.toString(), {
-            method: 'GET'
-        });
+         const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out after 3 seconds')), 3000));
 
-        const data = await response.json();
+        const fetchPromise = fetch(url.toString(), {
+            method: 'GET'
+        }).then(response => response.json());
+
+        const data = await Promise.race([fetchPromise, timeoutPromise]);
 
         if (data.success) {
             const bestMove = data.bestmove.split(' ')[1];
@@ -317,20 +323,27 @@ async function fetchBestMove() {
 
     const result = await getChromeStorageData(['lastFen', 'bestMove', 'drawMode', 'forceRedraw', 'scriptAlreadyExecuted']);
 
+    
     if (!result.bestMove || !result.lastFen || fenNotation !== result.lastFen) {
         const { scriptAlreadyExecuted } = await getChromeStorageData(['scriptAlreadyExecuted']);
 
-        if (scriptAlreadyExecuted == true){
-            return;
+        if (scriptAlreadyExecuted == false || fenNotation !== result.lastFen){
+
+            await setChromeStorageData({ scriptAlreadyExecuted: true });
+            console.log("Retrieving new best move from server...");
+
+            await setChromeStorageData({ lastFen: fenNotation });
+
+            const { useAPI } = await getChromeStorageData(['useAPI']);
+            if (useAPI){
+                console.log("Using stockfish.online/api...");
+                best_move_request_api(fenNotation);
+            } else {
+                console.log("Using local stockfish server...")
+                best_move_request_local_server(fenNotation);
+            }
         }
-        await setChromeStorageData({ scriptAlreadyExecuted: true });
-        console.log("Retrieving new best move from server...");
-
-        await setChromeStorageData({ lastFen: fenNotation });
-
-        //use your preferred stockfish method
-        //best_move_request_local_server(fenNotation);
-        best_move_request_api(fenNotation);
+        
     }
 
     if (result.bestMove && result.forceRedraw) {
