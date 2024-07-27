@@ -329,8 +329,8 @@ async function fetchBestMove() {
         await setChromeStorageData({ lastFen: fenNotation });
 
         //use your preferred stockfish method
-        best_move_request_local_server(fenNotation);
-        //best_move_request_api(fenNotation);
+        //best_move_request_local_server(fenNotation);
+        best_move_request_api(fenNotation);
     }
 
     if (result.bestMove && result.forceRedraw) {
