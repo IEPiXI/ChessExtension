@@ -3,21 +3,19 @@ body {
 }
 
 .grid-container {
-    gap: 20px;
+    display: grid;
+    gap: 15px;
     justify-items: center;
     align-items: center;
     padding: 20px;
+    width: 200px;
 }
 
 .grid-item {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 20px;
-}
-
-.grid-item:last-child {
-    padding-bottom: 0;
+    width: 100%;
 }
 
 .button {
@@ -28,12 +26,12 @@ body {
     border-width: 0;
     box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
     box-sizing: border-box;
-    color: #36395a;
+    color: #2e2e2e;
     cursor: pointer;
     display: inline-flex;
     font-family: "JetBrains Mono", monospace;
     height: 48px;
-    width: 150px;
+    width: 100%;
     justify-content: center;
     line-height: 1;
     list-style: none;
@@ -41,9 +39,9 @@ body {
     padding-left: 16px;
     padding-right: 16px;
     position: relative;
-    text-align: left;
+    text-align: center;
     text-decoration: none;
-    transition: box-shadow 0.15s, transform 0.15s;
+    transition: box-shadow 0.15s, transform 0.15s, background-color 0.15s;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
@@ -52,29 +50,49 @@ body {
     font-size: 14px;
 }
 
-.button:focus {
-    box-shadow: #d6d6e7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
-        #d6d6e7 0 -3px 0 inset;
-}
-
 .button:hover {
     box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
     transform: translateY(-2px);
 }
 
 .button:active {
-    box-shadow: #d6d6e7 0 3px 7px inset;
     transform: translateY(2px);
+}
+
+.button-on {
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #7fccb8 0 -3px 0 inset;
+    background-color: #a7f3d0;
+    color: #2e2e2e;
+}
+
+.button-on:hover {
+    box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #7fccb8 0 -3px 0 inset;
+}
+
+.button-off {
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #df8f8f 0 -3px 0 inset;
+    background-color: #fecaca;
+    color: #2e2e2e;
+}
+
+.button-off:hover {
+    box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #df8f8f 0 -3px 0 inset;
+}
+
+.button-icon {
+    height: 14px;
+    width: 14px;
+    margin-right: 8px;
 }
 
 .caption-label {
     font-family: "JetBrains Mono", monospace;
     text-decoration: underline;
     font-size: 20px;
-    color: #36395a;
+    color: #2e2e2e;
 }
 
 .author-label {
     font-family: "JetBrains Mono", monospace;
-    color: #36395a;
+    color: #2e2e2e;
 }
