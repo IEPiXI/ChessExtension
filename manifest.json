@@ -1,19 +1,42 @@
 {
     "manifest_version": 3,
     "name": "ChessExtension",
-    "version": "1.0",
+    "version": "2.0",
     "action": {
-        "default_popup": "popup.html"
+        "default_popup": "./src/popup.html"
     },
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "./src/background.js",
+        "type": "module"
     },
-    "permissions": ["activeTab", "tabs", "scripting","storage"],
-    "host_permissions": ["https://stockfish.online/api/*"],
+    "permissions": ["storage", "scripting", "offscreen"],
+    "content_scripts": [
+        {
+            "matches": ["*://*.chess.com/*"],
+            "js": [
+                "./src/types/content_types.js",
+                "./src/utils/utils.js",
+                "./src/utils/chess-utils.js",
+                "./src/content.js"
+            ]
+        }
+    ],
+    "content_security_policy": {
+        "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; connect-src 'self';"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "./src/stockfish/stockfish-nnue-16-no-simd.js",
+                "./src/stockfish/stockfish-nnue-16-no-simd.wasm"
+            ],
+            "matches": ["<all_urls>"]
+        }
+    ],
     "icons": {
-        "16": "icon.png",
-        "32": "icon.png",
-        "48": "icon.png",
-        "128": "icon.png"
+        "16": "./assets/icon.png",
+        "32": "./assets/icon.png",
+        "48": "./assets/icon.png",
+        "128": "./assets/icon.png"
     }
 }
