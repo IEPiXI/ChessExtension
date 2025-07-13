@@ -158,14 +158,14 @@ function drawArrow(svg, points) {
     const shortenLength = 6;
     const dx = points.to.x - points.from.x;
     const dy = points.to.y - points.from.y;
-    const length = Math.sqrt(dx * dx + dy * dy);
-    const shortenX = (dx / length) * shortenLength;
-    const shortenY = (dy / length) * shortenLength;
+    const length = Math.sqrt(dx * dx + dy * dy) || 0.0001;
+    const shortenX = (dx / length) * shortenLength || 0.0;
+    const shortenY = (dy / length) * shortenLength || 0.0;
 
-    line.setAttribute("x1", points.from.x);
-    line.setAttribute("y1", points.from.y);
-    line.setAttribute("x2", points.to.x - shortenX);
-    line.setAttribute("y2", points.to.y - shortenY);
+    line.setAttribute("x1", points.from.x || 0.0);
+    line.setAttribute("y1", points.from.y || 0.0);
+    line.setAttribute("x2", points.to.x - shortenX || 0.0);
+    line.setAttribute("y2", points.to.y - shortenY || 0.0);
     line.setAttribute("stroke", "green");
     line.setAttribute("stroke-width", "3");
     line.setAttribute("stroke-opacity", "0.5");
@@ -177,8 +177,8 @@ function drawArrow(svg, points) {
 function drawCircle(svg, points) {
     const circle = document.createElementNS("http://www.w3.org/2000/svg", DrawMode.CIRCLE);
 
-    circle.setAttribute("cx", points.from.x);
-    circle.setAttribute("cy", points.from.y);
+    circle.setAttribute("cx", points.from.x || 0.0);
+    circle.setAttribute("cy", points.from.y || 0.0);
     circle.setAttribute("r", "5");
     circle.setAttribute("fill", "green");
     circle.setAttribute("fill-opacity", "0.5");
@@ -188,10 +188,10 @@ function drawCircle(svg, points) {
 function transformMoveToCoordinates(bestMove) {
     const lettersToNumbers = { a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7 };
     // Adding 6.25 to center the arrow in the square
-    const fromX = lettersToNumbers[bestMove[0]] * 12.5 + 6.25 || 0.0;
-    const fromY = 100 - parseInt(bestMove[1]) * 12.5 + 6.25 || 0.0;
-    const toX = lettersToNumbers[bestMove[2]] * 12.5 + 6.25 || 0.0;
-    const toY = 100 - parseInt(bestMove[3]) * 12.5 + 6.25 || 0.0;
+    const fromX = lettersToNumbers[bestMove[0]] * 12.5 + 6.25;
+    const fromY = 100 - parseInt(bestMove[1]) * 12.5 + 6.25;
+    const toX = lettersToNumbers[bestMove[2]] * 12.5 + 6.25;
+    const toY = 100 - parseInt(bestMove[3]) * 12.5 + 6.25;
 
     return {
         from: { x: fromX, y: fromY },
